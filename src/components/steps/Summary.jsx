@@ -34,6 +34,8 @@ const BASE_URL = "https://ai-resume-backend-11s4.onrender.com";
     const handleAccept= ()=>{
         setFormData({...formData, summary:aiText});
         setShowAI(false);
+        setLoading(false);
+    setAiText("");
     }
     const handleDiscard= ()=>{
         setShowAI(false);

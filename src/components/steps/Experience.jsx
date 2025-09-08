@@ -38,6 +38,8 @@ const BASE_URL = "https://ai-resume-backend-11s4.onrender.com";
   const handleAccept = () => {
     setExpInput({ ...expInput, description: aiText });
     setShowAI(false);
+    setLoading(false);
+    setAiText("");
   };
 
   const handleDiscard = () => {

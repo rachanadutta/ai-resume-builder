@@ -17,7 +17,7 @@ function PrintTemplate() {
     <div style={{ background: "white", margin: 0, padding: 0 }}>
       {template === "template1" && <Template1 data={data} />}
       {template === "template2" && <Template2 data={data} />}
-      {Template3 === "template3" && <Template3 data= {data}/>}
+      {template === "template3" && <Template3 data= {data}/>}
     </div>
   );
 }

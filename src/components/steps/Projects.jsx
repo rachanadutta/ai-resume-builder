@@ -35,6 +35,8 @@ export default function Projects({ formData, setFormData, nextStep, prevStep }) 
   const handleAccept = () => {
     setProjectInput({ ...projectInput, description: aiText });
     setShowAI(false);
+    setLoading(false);
+    setAiText("");
   };
 
   const handleDiscard = () => {

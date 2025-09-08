@@ -32,6 +32,8 @@ export default function Skills({ formData, setFormData, nextStep, prevStep }) {
       skills: aiText.split(",").map((s) => s.trim()),
     });
     setShowAI(false);
+    setLoading(false);
+    setAiText("");
   };
 
   const addSkill = () => {
