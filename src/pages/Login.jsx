@@ -11,6 +11,7 @@ export default function Login({}) {
   const handleLogin = async ({ email, password }) => {
     try {
       const res = await axios.post(`${BASE_URL}/auth/login`, { email, password });
+      console.log("BASE URL", BASE_URL);
       
       // Save token and user info in localStorage
       localStorage.setItem("token", res.data.token);
