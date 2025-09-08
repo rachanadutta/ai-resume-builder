@@ -56,12 +56,14 @@ router.post("/download", authMiddleware, async (req,res)=>{
 
     const page = await browser.newPage();
     console.log("Downloading pdf");
+     page.on("console", msg => console.log("PAGE LOG:", msg.text()));
+    page.on("pageerror", err => console.log("PAGE ERROR:", err.message));
 
    await page.goto(
   `https://rachanadutta.github.io/ai-resume-builder/print-template?template=${template}&data=${encodeURIComponent(JSON.stringify(formData))}`,
   { waitUntil: "networkidle0" }
 );
-
+console.log("generating pdf");
     const pdf= await page.pdf({
       format: "A4",
       printBackground: true,
@@ -75,6 +77,7 @@ router.post("/download", authMiddleware, async (req,res)=>{
     });
     res.send(pdf);
   }catch(err){
+    console.error("PDF generation error: ",err);
     res.status(500).json({error: "Failed to generate PDF"});
   }
 });
