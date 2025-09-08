@@ -12,7 +12,7 @@ import Particles from '../components/Particles';
 
 
 function Hero() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = "https://ai-resume-backend-11s4.onrender.com";
 
   const [hasResume, setHasResume]= useState(false);
   const navigate= useNavigate();

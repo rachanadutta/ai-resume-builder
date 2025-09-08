@@ -9,7 +9,7 @@ export default function Projects({ formData, setFormData, nextStep, prevStep }) 
     link: "",
     description: ""
   });
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = "https://ai-resume-backend-11s4.onrender.com";
 
   const [showAI, setShowAI] = useState(false);
   const [loading, setLoading] = useState(false);

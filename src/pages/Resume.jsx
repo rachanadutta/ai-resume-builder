@@ -15,7 +15,7 @@ import TemplateSelector from "../components/TemplateSelector";
 import Navbar from "../components/Navbar.jsx";
 
 function Resume() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = "https://ai-resume-backend-11s4.onrender.com";
 
   const token = localStorage.getItem("token");
   if (!token) return <div className="p-8 text-center">Please log in to create Resume</div>;

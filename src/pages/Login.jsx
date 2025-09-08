@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login({}) {
   const navigate = useNavigate();
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = "https://ai-resume-backend-11s4.onrender.com";
 
 
   const handleLogin = async ({ email, password }) => {

@@ -12,7 +12,7 @@ export default function Experience({ formData, setFormData, nextStep, prevStep }
     end: null,
     description: ""
   });
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL = "https://ai-resume-backend-11s4.onrender.com";
 
 
   const [showAI, setShowAI] = useState(false);

@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 export default function Skills({ formData, setFormData, nextStep, prevStep }) {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = "https://ai-resume-backend-11s4.onrender.com";
 
   const [skillInput, setSkillInput] = useState("");
   const [showAI, setShowAI] = useState(false);

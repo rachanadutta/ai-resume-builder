@@ -6,8 +6,7 @@ import axios from "axios";
 
 
 export default function Summary({ formData, setFormData, nextStep, prevStep }) {
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-
+const BASE_URL = "https://ai-resume-backend-11s4.onrender.com";
     const [showAI, setShowAI]= useState(false);
     const [loading, setLoading] = useState(false);
     const [aiText, setAiText] = useState("");
