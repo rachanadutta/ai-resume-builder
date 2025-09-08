@@ -1,41 +1,84 @@
-📝 AI Resume Builder (Full-Stack Project)  
-A full-stack resume builder with AI-powered suggestions, live preview, multiple templates, and PDF download.  
+# 🤖 AI Resume Builder (Full-Stack Project)
 
-🔗 Deployed Frontend: https://rachanadutta.github.io/ai-resume-builder/  
-🔗 Deployed Backend: https://ai-resume-backend-11s4.onrender.com  
+This is a full-stack AI-powered resume builder. Users can create resumes with multiple sections, select templates, and download their resumes as PDFs. The front-end is built with React and Tailwind CSS, and the back-end uses Node.js, Express, MongoDB, and Puppeteer for PDF generation.
 
-🌟 Key Features:  
-🧑‍💼 **User Authentication:**  
-🔑 Signup / Login with JWT authentication  
-📝 Save resume progress automatically  
+---
 
-📑 **Step-by-Step Resume Builder:**  
-🧭 Personal Info: Name, Title, Email, Phone, GitHub, LinkedIn, Portfolio  
-💼 Experience: Add multiple experiences  
-🎓 Education: Add multiple educational entries  
-🛠 Skills & Projects: Add skills and projects with AI suggestions  
-💡 Summary: Generate AI-powered resume summary  
+## 🔗 Deployed Links
 
-🧩 **Optional Sections:**  
-🏆 Certificates  
-🌐 Languages  
-📦 Others  
+- **Frontend:** [https://rachanadutta.github.io/ai-resume-builder/](https://rachanadutta.github.io/ai-resume-builder/)  
+- **Backend:** `https://ai-resume-backend-11s4.onrender.com/`  
 
-🖥 **Preview & Templates:**  
-🎨 Multiple templates (Template1, Template2, Template3)  
-🔍 Live preview of the resume while editing  
+---
 
-📄 **PDF Download:**  
-📥 Export resume as PDF using Puppeteer  
+## 🌟 Key Features
 
-🛠 **Technologies Used:**  
-💻 Frontend: React, Vite, React Router, Tailwind CSS  
-🗄 Backend: Node.js, Express, MongoDB Atlas, Puppeteer  
-☁️ Deployment: Frontend → GitHub Pages, Backend → Render  
+### 📝 Resume Sections
+- **Personal Info:** Name, Title, Contact, Social links  
+- **Experience:** Work history with role, company, and description  
+- **Skills:** List of technical and soft skills  
+- **Projects:** Project title, description, and links  
+- **Education:** Academic history  
+- **Optional Sections:** Certificates, Languages, Others  
 
-⚙️ **Setup (Local):**  
-1. Clone the repo  
+### 🖌 Templates
+- Multiple resume templates to choose from  
+- Live preview while editing  
+
+### 💾 Auto-Save & Load
+- Progress is auto-saved to the backend after changes  
+- Resume can be loaded anytime after logging in  
+
+### 📄 PDF Download
+- Generate and download resume in PDF format  
+- Puppeteer used to render front-end templates as PDF  
+
+### 🔐 Authentication
+- Signup and login functionality with JWT-based authentication  
+- User-specific resumes  
+
+---
+
+## 🛠 Technologies Used
+
+**Frontend:**
+- React.js  
+- Tailwind CSS  
+- Framer Motion, GSAP for animations  
+- React Router for routing  
+
+**Backend:**
+- Node.js & Express  
+- MongoDB Atlas for database  
+- Puppeteer for PDF generation  
+- bcryptjs for password hashing  
+- JSON Web Tokens (JWT) for authentication  
+
+**Other Tools:**
+- Axios for HTTP requests  
+- Vite for frontend bundling  
+- GitHub Pages for frontend deployment  
+- Render for backend deployment  
+
+---
+
+## 📄 Pages Included
+
+- **Home:** Landing page with resume info  
+- **Signup & Login:** User authentication  
+- **Resume Builder:** Step-by-step form to create resume  
+- **Preview:** Live preview of selected template  
+- **Print Template:** Hidden page used for PDF generation  
+
+---
+
+## ⚡ How to Run Locally
+
+1. Clone the repository:
 ```bash
+git clone <repo-url>
+cd ai-resume-builder
+
 git clone https://github.com/rachanadutta/ai-resume-builder.git
 # Frontend
 npm install
