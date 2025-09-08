@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateZ(20px); }
+  100% { opacity: 1; transform: translateZ(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  25% { transform: translateY(-4px) translateX(2px); }
+  50% { transform: translateY(0) translateX(4px); }
+  75% { transform: translateY(2px) translateX(-2px); }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.preview-container{
+  transform: scale(0.7);
+  transform-origin: top left;
+  width: 210mm;
+  height: 297mm;
+  
+}
+@media (max-width: 500px) {
+  .preview-phone {
+    transform: scale(0.45);
+    transform-origin: top left;
+    width: 210mm;
+    height: 297mm;
+  }
+  
+}
+
