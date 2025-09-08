@@ -12,6 +12,8 @@ import Particles from '../components/Particles';
 
 
 function Hero() {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   const [hasResume, setHasResume]= useState(false);
   const navigate= useNavigate();
   useEffect(()=>{
@@ -20,7 +22,7 @@ function Hero() {
 
     const checkResume = async ()=>{
       try{
-        const res= await axios.get("http://localhost:5000/resume/load",{
+        const res= await axios.get(`${BASE_URL}/resume/load`,{
           headers: {Authorization: `Bearer ${token}`},
         });
         if(res.data.resume) setHasResume(true);

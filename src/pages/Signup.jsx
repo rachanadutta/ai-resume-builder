@@ -6,10 +6,12 @@ import { useNavigate } from "react-router-dom";
 export default function Signup({}){
 
     const navigate= useNavigate();
+   const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 
     const handleSignup= async ({email,password}) =>{
         try{
-            await axios.post("http://localhost:5000/auth/signup", {email,password});
+            await axios.post(`${BASE_URL}/auth/signup`, {email,password});
             alert("Signup succesful! Please login.");
             navigate("/login");
         }catch(err){

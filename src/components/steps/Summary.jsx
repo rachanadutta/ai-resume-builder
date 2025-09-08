@@ -6,6 +6,8 @@ import axios from "axios";
 
 
 export default function Summary({ formData, setFormData, nextStep, prevStep }) {
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
     const [showAI, setShowAI]= useState(false);
     const [loading, setLoading] = useState(false);
     const [aiText, setAiText] = useState("");
@@ -13,7 +15,7 @@ export default function Summary({ formData, setFormData, nextStep, prevStep }) {
     const handleAISuggest = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/ai/suggest", {
+      const res = await axios.post(`${BASE_URL}/api/ai/suggest`, {
         type: "summary",
         data: {
           skills: formData.skills,

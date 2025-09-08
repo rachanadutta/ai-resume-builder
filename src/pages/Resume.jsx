@@ -15,6 +15,8 @@ import TemplateSelector from "../components/TemplateSelector";
 import Navbar from "../components/Navbar.jsx";
 
 function Resume() {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   const token = localStorage.getItem("token");
   if (!token) return <div className="p-8 text-center">Please log in to create Resume</div>;
 
@@ -37,7 +39,7 @@ const handleDownload = async () => {
   
 
     const res = await axios.post(
-      "http://localhost:5000/resume/download",
+      `${BASE_URL}/resume/download`,
       { formData, template: selectedTemplate },
       { responseType: "blob", headers: { Authorization: `Bearer ${token}` } }
     );
@@ -67,7 +69,7 @@ const handleDownload = async () => {
     const loadResume = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/resume/load",
+          `${BASE_URL}/resume/load`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         if (res.data.resume) {
@@ -92,7 +94,7 @@ useEffect(() => {
   saveTimeout.current = setTimeout(async () => {
     try {
       await axios.post(
-        "http://localhost:5000/resume/save",
+        `${BASE_URL}/resume/save`,
         { formData },
         { headers: { Authorization: `Bearer ${token}` } }
       );
