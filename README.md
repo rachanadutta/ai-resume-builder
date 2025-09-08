@@ -1,12 +1,61 @@
-# React + Vite
+📝 AI Resume Builder (Full-Stack Project)  
+A full-stack resume builder with AI-powered suggestions, live preview, multiple templates, and PDF download.  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🔗 Deployed Frontend: https://rachanadutta.github.io/ai-resume-builder/  
+🔗 Deployed Backend: https://ai-resume-backend-11s4.onrender.com  
 
-Currently, two official plugins are available:
+🌟 Key Features:  
+🧑‍💼 **User Authentication:**  
+🔑 Signup / Login with JWT authentication  
+📝 Save resume progress automatically  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+📑 **Step-by-Step Resume Builder:**  
+🧭 Personal Info: Name, Title, Email, Phone, GitHub, LinkedIn, Portfolio  
+💼 Experience: Add multiple experiences  
+🎓 Education: Add multiple educational entries  
+🛠 Skills & Projects: Add skills and projects with AI suggestions  
+💡 Summary: Generate AI-powered resume summary  
 
-## Expanding the ESLint configuration
+🧩 **Optional Sections:**  
+🏆 Certificates  
+🌐 Languages  
+📦 Others  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+🖥 **Preview & Templates:**  
+🎨 Multiple templates (Template1, Template2, Template3)  
+🔍 Live preview of the resume while editing  
+
+📄 **PDF Download:**  
+📥 Export resume as PDF using Puppeteer  
+
+🛠 **Technologies Used:**  
+💻 Frontend: React, Vite, React Router, Tailwind CSS  
+🗄 Backend: Node.js, Express, MongoDB Atlas, Puppeteer  
+☁️ Deployment: Frontend → GitHub Pages, Backend → Render  
+
+⚙️ **Setup (Local):**  
+1. Clone the repo  
+```bash
+git clone https://github.com/rachanadutta/ai-resume-builder.git
+# Frontend
+npm install
+# Backend
+cd backend
+npm install
+Backend (.env)
+
+MONGO_URI=<your-mongodb-uri>
+JWT_SECRET=<your-jwt-secret>
+GEMINI_API_KEY=<your-ai-key>
+PORT=5000
+Frontend (.env)
+
+VITE_BASE_URL=http://localhost:5000
+Run locally
+
+# Backend
+cd backend
+npm run dev
+# Frontend
+cd ..
+npm run dev
