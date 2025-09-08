@@ -11,7 +11,12 @@ const app = express();
 // middleware to parse JSON
 app.use(express.json());
 
-app.use(cors());
+app.use(cors(
+    {
+        origin: "https://rachanadutta.github.io",
+        credentials: true,
+    }
+));
 
 // connect to MongoDB
 connectDB();
