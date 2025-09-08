@@ -34,17 +34,53 @@ function Resume() {
     experience: [],
     education: [],
   });
-const handleDownload = async () => {
-  try {
+// const handleDownload = async () => {
+//   try {
   
 
+//     const res = await axios.post(
+//       `${BASE_URL}/resume/download`,
+//       { formData, template: selectedTemplate },
+//       { responseType: "blob", headers: { Authorization: `Bearer ${token}` } }
+//     );
+
+//     // create a blob and download
+//     const url = window.URL.createObjectURL(new Blob([res.data]));
+//     const link = document.createElement("a");
+//     link.href = url;
+//     link.setAttribute("download", "resume.pdf");
+//     document.body.appendChild(link);
+//     link.click();
+//     document.body.removeChild(link);
+//   } catch (err) {
+//     console.error("Error downloading resume:", err.response?.data || err.message);
+//   }
+// };
+// Inside the handleDownload function in Resume.jsx
+
+const handleDownload = async () => {
+  try {
     const res = await axios.post(
       `${BASE_URL}/resume/download`,
       { formData, template: selectedTemplate },
       { responseType: "blob", headers: { Authorization: `Bearer ${token}` } }
     );
 
-    // create a blob and download
+    // Check if the response is a blob, and not a JSON error
+    const contentType = res.headers['content-type'];
+    if (contentType && contentType.includes('application/json')) {
+      // It's a JSON error, not a PDF.
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const errorData = JSON.parse(e.target.result);
+        console.error("Server responded with a JSON error:", errorData.error);
+        alert(`Error: ${errorData.error}`);
+      };
+      reader.readAsText(res.data);
+      return; // Stop execution
+    }
+
+    // If it's a PDF, proceed to download
     const url = window.URL.createObjectURL(new Blob([res.data]));
     const link = document.createElement("a");
     link.href = url;
@@ -53,7 +89,9 @@ const handleDownload = async () => {
     link.click();
     document.body.removeChild(link);
   } catch (err) {
+    // This is a generic catch-all for other network errors
     console.error("Error downloading resume:", err.response?.data || err.message);
+    alert("Failed to download resume. Please try again.");
   }
 };
 
