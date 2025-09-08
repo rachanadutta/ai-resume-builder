@@ -58,7 +58,7 @@ router.post("/download", authMiddleware, async (req,res)=>{
     console.log("Downloading pdf");
 
    await page.goto(
-  `http://localhost:5173/print-template?template=${template}&data=${encodeURIComponent(JSON.stringify(formData))}`,
+  `https://rachanadutta.github.io/ai-resume-builder/print-template?template=${template}&data=${encodeURIComponent(JSON.stringify(formData))}`,
   { waitUntil: "networkidle0" }
 );
 
