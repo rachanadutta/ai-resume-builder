@@ -100,6 +100,8 @@ router.post("/download", authMiddleware, async (req, res) => {
       ],
       // This is crucial for environments like Render
       // executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(), // fallback for local
+  headless: "new", 
     });
 
     const page = await browser.newPage();
@@ -119,6 +121,7 @@ router.post("/download", authMiddleware, async (req, res) => {
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
+      preferCSSPageSize: true,
     });
 
     console.log("PDF generated successfully.");
