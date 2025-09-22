@@ -5,6 +5,7 @@ import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
 
 
+
 const router = express.Router();
 
 router.post("/save",authMiddleware, async (req,res)=>{
@@ -108,7 +109,7 @@ router.post("/download", authMiddleware, async (req, res) => {
     page.on("console", (msg) => console.log("PAGE LOG:", msg.text()));
     page.on("pageerror", (err) => console.log("PAGE ERROR:", err.message));
 
-    const pageUrl = `https://rachanadutta.github.io/ai-resume-builder/print-template?template=${template}&data=${encodeURIComponent(JSON.stringify(formData))}`;
+    const pageUrl = `https://rachanadutta.github.io/ai-resume-builder/#/print-template?template=${template}&data=${encodeURIComponent(JSON.stringify(formData))}`;
     console.log(`Navigating to URL: ${pageUrl}`);
 
     await page.goto(pageUrl, {
