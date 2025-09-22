@@ -92,7 +92,7 @@ router.post("/download", authMiddleware, async (req, res) => {
   let browser;
   try {
     // Add more args for better compatibility on different hosting platforms
-   const browser = await puppeteer.launch({
+   browser = await puppeteer.launch({
       args: [
        "--no-sandbox",
     "--disable-setuid-sandbox",
@@ -114,7 +114,7 @@ router.post("/download", authMiddleware, async (req, res) => {
       ],
       // This is crucial for environments like Render
       // executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(), // fallback for local
+    
   headless: "new", 
     });
 
