@@ -1,7 +1,8 @@
 import express from "express";
 import Resume from "../models/Resume.js";
 import authMiddleware from "../middleware/authMiddleware.js";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
 
 
 const router = express.Router();
@@ -93,29 +94,13 @@ router.post("/download", authMiddleware, async (req, res) => {
   try {
     // Add more args for better compatibility on different hosting platforms
    browser = await puppeteer.launch({
-      args: [
-       "--no-sandbox",
-    "--disable-setuid-sandbox",
-    "--disable-dev-shm-usage",
-    "--single-process",
-    "--disable-gpu",
-    "--disable-extensions",
-    "--disable-background-networking",
-    "--disable-background-timer-throttling",
-    "--disable-client-side-phishing-detection",
-    "--disable-default-apps",
-    "--disable-hang-monitor",
-    "--disable-popup-blocking",
-    "--disable-prompt-on-repost",
-    "--disable-sync",
-    "--metrics-recording-only",
-    "--no-first-run",
-    "--safebrowsing-disable-auto-update",
-      ],
+     args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless, // Use the recommended headless mode
+      ignoreHTTPSErrors: true,
       // This is crucial for environments like Render
-      // executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
-    
-  headless: "new", 
+      // executablePath: process.env.PUPPETEER_EXECUTABLE_PATH, 
     });
 
     const page = await browser.newPage();
