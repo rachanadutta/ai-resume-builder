@@ -92,11 +92,25 @@ router.post("/download", authMiddleware, async (req, res) => {
   let browser;
   try {
     // Add more args for better compatibility on different hosting platforms
-    browser = await puppeteer.launch({
+   const browser = await puppeteer.launch({
       args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage", // Recommended for low-memory environments
+       "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-dev-shm-usage",
+    "--single-process",
+    "--disable-gpu",
+    "--disable-extensions",
+    "--disable-background-networking",
+    "--disable-background-timer-throttling",
+    "--disable-client-side-phishing-detection",
+    "--disable-default-apps",
+    "--disable-hang-monitor",
+    "--disable-popup-blocking",
+    "--disable-prompt-on-repost",
+    "--disable-sync",
+    "--metrics-recording-only",
+    "--no-first-run",
+    "--safebrowsing-disable-auto-update",
       ],
       // This is crucial for environments like Render
       // executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
