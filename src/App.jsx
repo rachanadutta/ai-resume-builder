@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import React, { useEffect } from 'react';
-
-import { useNavigate } from 'react-router-dom';
+// Import the correct hook for your version of React Router
+import { useNavigate } from 'react-router-dom'; 
 import Home from "./pages/Home.jsx";
 import Resume from "./pages/Resume.jsx";
 import Signup from "./pages/Signup.jsx";
