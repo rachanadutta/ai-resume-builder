@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI RESUME BUILDER</title>
+    <script type="text/javascript">
+  // The base path of your project on GitHub Pages
+  const repoName = '/ai-resume-builder';
+
+  // Get the path and search query from the URL that triggered the 404
+  const path = window.location.pathname;
+  const search = window.location.search;
+  
+  // Store the intended path and search query in sessionStorage
+  sessionStorage.redirect = path.substring(repoName.length);
+  sessionStorage.redirectSearch = search;
+
+  // Redirect to the root of the app. The React app will handle the rest.
+  window.location.replace(repoName + '/');
+</script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
