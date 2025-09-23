@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title>Redirecting...</title>
     <script>
-      // If not root, redirect to index.html so React Router handles it
+      // Get the pathname, search, and hash
       const path = window.location.pathname + window.location.search + window.location.hash;
-      if (path !== '/' && !path.includes('index.html')) {
-        window.location.href = '/ai-resume-builder/index.html' + path;
-      }
+
+      // Redirect to your base path, preserving everything after the repo name
+      const base = '/ai-resume-builder';
+      window.location.replace(base + '/index.html' + path.replace(base, ''));
     </script>
   </head>
   <body>
