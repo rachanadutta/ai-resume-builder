@@ -103,8 +103,8 @@ function Template2({ data }) {
           <section>
             <h3 className="text-md font-bold border-b pb-1 mb-2">Others</h3>
             <ul className="list-disc list-inside text-sm space-y-1">
-              {data.others.map((skill, i) => (
-                <li key={i}>{skill}</li>
+              {data.others.map((other, i) => (
+                <li key={i}>{other}</li>
               ))}
             </ul>
           </section>

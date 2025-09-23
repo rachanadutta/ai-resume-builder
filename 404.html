@@ -1,13 +1,31 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI RESUME BUILDER</title>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script type="text/javascript">
+      // Take the current path the user tried to visit
+      var path = window.location.pathname;
+
+      // If the path ends with 404.html, strip it out
+      if (path.endsWith("404.html")) {
+        path = path.replace("404.html", "");
+      }
+
+      // Build the redirect URL -> index.html + original path (React will parse it)
+      var redirectUrl =
+        window.location.protocol +
+        "//" +
+        window.location.host +
+        path +
+        window.location.search +
+        window.location.hash;
+
+      // Redirect immediately
+      window.location.replace(redirectUrl);
+    </script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <p>Redirecting...</p>
   </body>
 </html>
