@@ -95,29 +95,32 @@ function Template1({ data }) {
       )}
 
       {/* Education */}
-      <section className="mb-3">
-        <h2 className="font-bold border-b pb-1 text-sm">Education</h2>
-        {data?.education?.length > 0 ? (
-          data.education.map((edu, i) => (
-            <ul key={i} className=" mt-1">
-              <li className="font-semibold">
-                {edu.degree}
-                <br />
-  <span className="text-gray-700 font-normal">{edu.institution}</span>
-              </li>
-              <li className="text-gray-500 text-xs">
-                {formatDate(edu.startDate)} -{" "}
-                {edu.endDate ? formatDate(edu.endDate) : "Present"}
-              </li>
-              {edu.description && (
-                <li className="text-gray-700 text-sm">{edu.description}</li>
-              )}
-            </ul>
-          ))
-        ) : (
-          <p className="text-gray-400 italic">No education added yet</p>
+      {/* Education */}
+<section className="mb-3">
+  <h2 className="font-bold border-b pb-1 text-sm">Education</h2>
+  {data?.education?.length > 0 ? (
+    data.education.map((edu, i) => (
+      <ul key={i} className="mt-1">
+        <li className="flex justify-between items-center font-semibold">
+          <span>
+            {edu.degree}
+            <br />
+            <span className="text-gray-700 font-normal">{edu.institution}</span>
+          </span>
+          <span className="text-gray-500 text-xs">
+            {formatDate(edu.startDate)} -{" "}
+            {edu.endDate ? formatDate(edu.endDate) : "Present"}
+          </span>
+        </li>
+        {edu.description && (
+          <li className="text-gray-700 text-sm">{edu.description}</li>
         )}
-      </section>
+      </ul>
+    ))
+  ) : (
+    <p className="text-gray-400 italic">No education added yet</p>
+  )}
+</section>
 
       {/* Experience */}
       {/* Experience */}
@@ -216,9 +219,13 @@ function Template1({ data }) {
                   </a>
                 )}
               </div>
-              <p className="text-gray-700 text-sm mt-1 pl-3">
-  • {proj.description}
-</p>
+              {proj.description && (
+          <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
+            {proj.description.split("\n").map((point, idx) => (
+              <li key={idx}>{point.trim()}</li>
+            ))}
+          </ul>
+        )}
             </div>
           ))}
         </section>
