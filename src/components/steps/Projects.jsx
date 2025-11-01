@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import AIBox from "../AIBox";
 import axios from "axios";
 
-
 export default function Projects({ formData, setFormData, nextStep, prevStep }) {
   const [projectInput, setProjectInput] = useState({
     title: "",
     link: "",
-    description: ""
+    date: "", // ✅ new field
+    description: "",
   });
-  const BASE_URL = "https://ai-resume-backend-11s4.onrender.com";
 
+  const BASE_URL = "https://ai-resume-backend-11s4.onrender.com";
   const [showAI, setShowAI] = useState(false);
   const [loading, setLoading] = useState(false);
   const [aiText, setAiText] = useState("");
@@ -31,7 +31,6 @@ export default function Projects({ formData, setFormData, nextStep, prevStep }) 
     }
   };
 
-
   const handleAccept = () => {
     setProjectInput({ ...projectInput, description: aiText });
     setShowAI(false);
@@ -50,10 +49,10 @@ export default function Projects({ formData, setFormData, nextStep, prevStep }) 
 
     setFormData({
       ...formData,
-      projects: [...(formData.projects || []), projectInput]
+      projects: [...(formData.projects || []), projectInput],
     });
 
-    setProjectInput({ title: "", link: "", description: "" });
+    setProjectInput({ title: "", link: "", date: "", description: "" });
   };
 
   const removeProject = (index) => {
@@ -70,15 +69,30 @@ export default function Projects({ formData, setFormData, nextStep, prevStep }) 
         type="text"
         placeholder="Project Title"
         value={projectInput.title}
-        onChange={(e) => setProjectInput({ ...projectInput, title: e.target.value })}
+        onChange={(e) =>
+          setProjectInput({ ...projectInput, title: e.target.value })
+        }
       />
 
       <input
-        className="border caret-black p-2 rounded"
+        className="border p-2 rounded caret-black"
         type="url"
         placeholder="Project Link (optional)"
         value={projectInput.link}
-        onChange={(e) => setProjectInput({ ...projectInput, link: e.target.value })}
+        onChange={(e) =>
+          setProjectInput({ ...projectInput, link: e.target.value })
+        }
+      />
+
+      {/* ✅ Date input */}
+      <input
+        className="border p-2 rounded caret-black"
+        type="text"
+        placeholder="Date or Duration (e.g., Jan 2024 – Mar 2024)"
+        value={projectInput.date}
+        onChange={(e) =>
+          setProjectInput({ ...projectInput, date: e.target.value })
+        }
       />
 
       <textarea
@@ -86,7 +100,9 @@ export default function Projects({ formData, setFormData, nextStep, prevStep }) 
         placeholder="Project Description"
         rows={4}
         value={projectInput.description}
-        onChange={(e) => setProjectInput({ ...projectInput, description: e.target.value })}
+        onChange={(e) =>
+          setProjectInput({ ...projectInput, description: e.target.value })
+        }
       />
 
       <div className="flex gap-3 mt-4">
@@ -111,8 +127,15 @@ export default function Projects({ formData, setFormData, nextStep, prevStep }) 
         {formData.projects?.map((project, index) => (
           <li className="text-lg mt-3" key={index}>
             <strong>{project.title}</strong>{" "}
+            {project.date && <span className="text-gray-500">({project.date})</span>}
+            {" "}
             {project.link && (
-              <a href={project.link} target="_blank" rel="noopener noreferrer">
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600"
+              >
                 [Link]
               </a>
             )}
@@ -146,7 +169,12 @@ export default function Projects({ formData, setFormData, nextStep, prevStep }) 
       </div>
 
       {(loading || aiText) && (
-        <AIBox text={aiText} loading={loading} onAccept={handleAccept} onDiscard={handleDiscard} />
+        <AIBox
+          text={aiText}
+          loading={loading}
+          onAccept={handleAccept}
+          onDiscard={handleDiscard}
+        />
       )}
     </div>
   );

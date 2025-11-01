@@ -96,7 +96,8 @@ function Template1({ data }) {
           data.education.map((edu, i) => (
             <ul key={i} className=" mt-1">
               <li className="font-semibold">
-                {edu.degree} - {edu.institution}
+                {edu.degree}
+                {edu.institution}
               </li>
               <li className="text-gray-500 text-xs">
                 {formatDate(edu.startDate)} -{" "}
