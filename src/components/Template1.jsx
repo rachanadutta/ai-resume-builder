@@ -141,13 +141,13 @@ function Template1({ data }) {
         </div>
 
         {/* Description as bullet points */}
-        {exp.description && (
+        {/* {exp.description && (
           <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
             {exp.description.split("\n").map((point, idx) => (
               <li key={idx}>{point.trim()}</li>
             ))}
           </ul>
-        )}
+        )} */}
       </div>
     ))}
   </section>
@@ -219,7 +219,7 @@ function Template1({ data }) {
                   </a>
                 )}
               </div>
-              {proj.description && (
+              {/* {proj.description && (
           <ul className="list-disc list-inside text-sm text-gray-700 mt-1 ml-2">
             {proj.description
               .split(/\n+/) // splits only where you pressed Enter (paragraph break)
@@ -228,7 +228,7 @@ function Template1({ data }) {
                 <li key={idx}>{point.trim()}</li>
               ))}
           </ul>
-        )}
+        )} */}
             </div>
           ))}
         </section>
