@@ -1,32 +1,21 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+import jwt from "jsonwebtoken";
 
-const authMiddleware = async (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   console.log("Auth middleware hit");
-  let token;
-
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    try {
-      token = req.headers.authorization.split(" ")[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.id).select("-password");
-      next();
-      return; // <-- Add return here to stop execution after success
-    } catch (error) {
-      console.error("Token failed:", error.message);
-      res.status(401).json({ error: "Not authorized, token failed" });
-      return; // <-- FIX 1: Added return
-    }
-  }
+  const token = req.header("Authorization")?.replace("Bearer ", "");
 
   if (!token) {
-    console.log("No token found");
-    res.status(401).json({ error: "Not authorized, no token" });
-    return; // <-- FIX 2: Added return
+    return res.status(401).json({ message: "No token" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = decoded; // <- just assign decoded directly
+    next();
+  } catch (err) {
+    res.status(401).json({ message: "Token is not valid" });
   }
 };
 
-module.exports = authMiddleware;
+export default authMiddleware;
