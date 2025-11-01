@@ -32,7 +32,7 @@ function Template1({ data }) {
   return (
     <div
       ref={containerRef}
-      className="p-16 mx-auto max-w-4xl bg-white shadow-md rounded-md"
+      className="p-16 m-6 mx-auto max-w-4xl bg-white shadow-md rounded-md"
       style={{
         width: "210mm",
         minHeight: "297mm",
@@ -45,13 +45,13 @@ function Template1({ data }) {
       <div className="mb-4">
         <h1
           className="font-bold text-gray-900"
-          style={{ fontSize: `${1.4 * scaleFactor}rem` }}
+          style={{ fontSize: `${1 * scaleFactor}rem` }}
         >
           {data?.name || "Your Name"}
         </h1>
         <h2
           className="text-gray-800"
-          style={{ fontSize: `${1 * scaleFactor}rem` }}
+          style={{ fontSize: `${0.7 * scaleFactor}rem` }}
         >
           {data?.title}
         </h2>
