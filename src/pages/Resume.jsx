@@ -37,66 +37,6 @@ function Resume() {
     other: [],
     languages : [],
   });
-// const handleDownload = async () => {
-//   try {
-  
-
-//     const res = await axios.post(
-//       `${BASE_URL}/resume/download`,
-//       { formData, template: selectedTemplate },
-//       { responseType: "blob", headers: { Authorization: `Bearer ${token}` } }
-//     );
-
-//     // create a blob and download
-//     const url = window.URL.createObjectURL(new Blob([res.data]));
-//     const link = document.createElement("a");
-//     link.href = url;
-//     link.setAttribute("download", "resume.pdf");
-//     document.body.appendChild(link);
-//     link.click();
-//     document.body.removeChild(link);
-//   } catch (err) {
-//     console.error("Error downloading resume:", err.response?.data || err.message);
-//   }
-// };
-// Inside the handleDownload function in Resume.jsx
-
-const handleDownload = async () => {
-  try {
-    const res = await axios.post(
-      `${BASE_URL}/resume/download`,
-      { formData, template: selectedTemplate },
-      { responseType: "blob", headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    // Check if the response is a blob, and not a JSON error
-    const contentType = res.headers['content-type'];
-    if (contentType && contentType.includes('application/json')) {
-      // It's a JSON error, not a PDF.
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const errorData = JSON.parse(e.target.result);
-        console.error("Server responded with a JSON error:", errorData.error);
-        alert(`Error: ${errorData.error}`);
-      };
-      reader.readAsText(res.data);
-      return; // Stop execution
-    }
-
-    // If it's a PDF, proceed to download
-    const url = window.URL.createObjectURL(new Blob([res.data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "resume.pdf");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  } catch (err) {
-    // This is a generic catch-all for other network errors
-    console.error("Error downloading resume:", err.response?.data || err.message);
-    alert("Failed to download resume. Please try again.");
-  }
-};
 
   const [selectedTemplate, setSelectedTemplate] = useState("template1");
   const [optionalStep, setOptionalStep] = useState(null);
@@ -104,6 +44,39 @@ const handleDownload = async () => {
   const [step, setStep] = useState(1);
 
   const saveTimeout = useRef(null);
+
+  // === v START: MODIFIED DOWNLOAD HANDLER v ===
+  
+  // This function fixes the "URI malformed" error by using localStorage
+  // instead of a long URL query parameter.
+  const handleDownload = () => {
+    console.log("Download route hit");
+  
+    // 1. Stringify your data
+    const dataStr = JSON.stringify(formData);
+  
+    // 2. Save data and template to localStorage
+    // The PrintTemplate page will read this
+    localStorage.setItem('printResumeData', dataStr);
+    localStorage.setItem('printResumeTemplate', selectedTemplate);
+  
+    console.log("Opening print window...");
+  
+    // 3. Open the print-template page with a clean URL
+    // We add /ai-resume-builder/ prefix for GitHub Pages compatibility
+    const printWindow = window.open(
+      '/ai-resume-builder/print-template',
+      '_blank'
+    );
+    if (printWindow) {
+      printWindow.focus();
+    } else {
+      alert("Please allow popups to download your resume.");
+    }
+  };
+  
+  // === ^ END: MODIFIED DOWNLOAD HANDLER ^ ===
+
 
   // Load resume from backend on mount
   useEffect(() => {
@@ -125,34 +98,32 @@ const handleDownload = async () => {
   }, [token]);
 
   // Auto-save with debounce
+  useEffect(() => {
+    if (!token) return;
 
+    if (saveTimeout.current) clearTimeout(saveTimeout.current);
 
-useEffect(() => {
-  if (!token) return;
+    saveTimeout.current = setTimeout(async () => {
+      try {
+        await axios.post(
+          `${BASE_URL}/resume/save`,
+          { formData },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        console.log("Progress saved!");
+      } catch (err) {
+        console.error("Error saving progress:", err.response?.data || err.message);
+      }
+    }, 1000); // save 1s after last change
 
-  if (saveTimeout.current) clearTimeout(saveTimeout.current);
-
-  saveTimeout.current = setTimeout(async () => {
-    try {
-      await axios.post(
-        `${BASE_URL}/resume/save`,
-        { formData },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      console.log("Progress saved!");
-    } catch (err) {
-      console.error("Error saving progress:", err.response?.data || err.message);
-    }
-  }, 1000); // save 1s after last change
-
-  return () => clearTimeout(saveTimeout.current);
-}, [formData, token]);
+    return () => clearTimeout(saveTimeout.current);
+  }, [formData, token]);
 
 
   const nextStep = () => {
-  if (!completedSteps.includes(step)) setCompletedSteps([...completedSteps, step]);
-  setStep(prev => Math.min(prev + 1, 6)); // step never exceeds 6
-};
+    if (!completedSteps.includes(step)) setCompletedSteps([...completedSteps, step]);
+    setStep(prev => Math.min(prev + 1, 6)); // step never exceeds 6
+  };
 
 
   const prevStep = () => {
@@ -162,49 +133,46 @@ useEffect(() => {
   return (
     <div>
       <Navbar />
-    <div className="flex lg:flex-row flex-col min-h-screen bg-gradient-to-r from-[#0f172a] to-[#334155] overflow-x-hidden">
-      
-      <aside className="lg:w-24 w-full bg-gray-700/70 rounded-r-lg p-4 shadow-md">
-        <Progress step={step} setStep={setStep} completedSteps={completedSteps} />
-      </aside>
+      <div className="flex lg:flex-row flex-col min-h-screen bg-gradient-to-r from-[#0f172a] to-[#334155] overflow-x-hidden">
+        
+        <aside className="lg:w-24 w-full bg-gray-700/70 rounded-r-lg p-4 shadow-md">
+          <Progress step={step} setStep={setStep} completedSteps={completedSteps} />
+        </aside>
 
-      <main className="flex flex-col lg:flex-row flex-1 p-8">
-        <div className="max-w-3xl md:w-[700px] bg-white shadow-lg rounded-2xl p-6">
-          {step === 1 && <PersonalInfo formData={formData} setFormData={setFormData} nextStep={nextStep} />}
-          
-          {step === 2 && <Experience formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />}
-          {step === 3 && <Skills formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />}
-          {step === 4 && <Projects formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />}
-          {step === 5 && <Education formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />}
-          {step === 6 && <Summary formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />}
+        <main className="flex flex-col lg:flex-row flex-1 p-8">
+          <div className="max-w-3xl md:w-[700px] bg-white shadow-lg rounded-2xl p-6">
+            {step === 1 && <PersonalInfo formData={formData} setFormData={setFormData} nextStep={nextStep} />}
+            
+            {step === 2 && <Experience formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />}
+            {step === 3 && <Skills formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />}
+            {step === 4 && <Projects formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />}
+            {step === 5 && <Education formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />}
+            {step === 6 && <Summary formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />}
 
-          {/* Optional sections */}
-          <div className="mt-10">
-            <h2 className="text-lg font-semibold mb-4 text-gray-700">Optional Sections</h2>
-            <div className="flex gap-3 cursor-pointer">
-              <button onClick={() => setOptionalStep("certificates")} className="px-4 cursor-pointer py-2 rounded-xl border hover:bg-blue-50 text-gray-600">Certificates</button>
-              <button onClick={() => setOptionalStep("languages")} className="px-4 py-2 rounded-xl border cursor-pointer hover:bg-blue-50 text-gray-600">Languages</button>
-              <button onClick={() => setOptionalStep("other")} className="px-4 py-2 rounded-xl cursor-pointer border hover:bg-blue-50 text-gray-600">Other</button>
+            {/* Optional sections */}
+            <div className="mt-10">
+              <h2 className="text-lg font-semibold mb-4 text-gray-700">Optional Sections</h2>
+              <div className="flex gap-3 cursor-pointer">
+                <button onClick={() => setOptionalStep("certificates")} className="px-4 cursor-pointer py-2 rounded-xl border hover:bg-blue-50 text-gray-600">Certificates</button>
+                <button onClick={() => setOptionalStep("languages")} className="px-4 py-2 rounded-xl border cursor-pointer hover:bg-blue-50 text-gray-600">Languages</button>
+                <button onClick={() => setOptionalStep("other")} className="px-4 py-2 rounded-xl cursor-pointer border hover:bg-blue-50 text-gray-600">Other</button>
+              </div>
+            </div>
+            <div className="mt-6 cursor-pointer">
+              {optionalStep === "certificates" && <Certificate formData={formData} setFormData={setFormData} nextStep={() => setOptionalStep(null)} prevStep={() => setOptionalStep(null)} />}
+              {optionalStep === "languages" && <Languages formData={formData} setFormData={setFormData} nextStep={() => setOptionalStep(null)} prevStep={() => setOptionalStep(null)} />}
+              {optionalStep === "other" && <Others formData={formData} setFormData={setFormData} nextStep={() => setOptionalStep(null)} prevStep={() => setOptionalStep(null)} />}
             </div>
           </div>
-          <div className="mt-6 cursor-pointer">
-            {optionalStep === "certificates" && <Certificate formData={formData} setFormData={setFormData} nextStep={() => setOptionalStep(null)} prevStep={() => setOptionalStep(null)} />}
-            {optionalStep === "languages" && <Languages formData={formData} setFormData={setFormData} nextStep={() => setOptionalStep(null)} prevStep={() => setOptionalStep(null)} />}
-            {optionalStep === "other" && <Others formData={formData} setFormData={setFormData} nextStep={() => setOptionalStep(null)} prevStep={() => setOptionalStep(null)} />}
-          </div>
-        </div>
-      </main>
+        </main>
 
-      <aside className="preview-container w-full mt-8 ml-4 md:mr-8">
-        <Preview formData={formData} selectedTemplate={selectedTemplate} setSelectedTemplate={setSelectedTemplate} />
-        <TemplateSelector selectedTemplate={selectedTemplate} setSelectedTemplate={setSelectedTemplate} />
+        <aside className="preview-container w-full mt-8 ml-4 md:mr-8">
+          <Preview formData={formData} selectedTemplate={selectedTemplate} setSelectedTemplate={setSelectedTemplate} />
+          <TemplateSelector selectedTemplate={selectedTemplate} setSelectedTemplate={setSelectedTemplate} />
 
-        <button onClick={handleDownload}  className="bg-blue-500 mt-10 rounded-xl cursor-pointer hover:bg-blue-600 text-xl text-white px-3 py-2 border">Download</button>
-      </aside>
-
-      
-      
-    </div>
+          <button onClick={handleDownload}  className="bg-blue-500 mt-10 rounded-xl cursor-pointer hover:bg-blue-600 text-xl text-white px-3 py-2 border">Download</button>
+        </aside>
+      </div>
     </div>
   );
 }
