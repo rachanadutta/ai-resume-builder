@@ -124,6 +124,11 @@ const encodedData = encodeURIComponent(cleanedData);
       waitUntil: "networkidle0",
       timeout: 60000, // Increase timeout to 60 seconds
     });
+     await page.waitForFunction(
+      'document.querySelector("#resume-ready") !== null',
+      { timeout: 10000 } // wait max 10 seconds
+    );
+
     console.log("Page loaded. Generating PDF...");
 
     const pdf = await page.pdf({
