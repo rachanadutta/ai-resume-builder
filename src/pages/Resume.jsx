@@ -49,31 +49,37 @@ function Resume() {
   
   // This function fixes the "URI malformed" error by using localStorage
   // instead of a long URL query parameter.
-  const handleDownload = () => {
-    console.log("Download route hit");
-  
-    // 1. Stringify your data
-    const dataStr = JSON.stringify(formData);
-  
-    // 2. Save data and template to localStorage
-    // The PrintTemplate page will read this
-    localStorage.setItem('printResumeData', dataStr);
-    localStorage.setItem('printResumeTemplate', selectedTemplate);
-  
-    console.log("Opening print window...");
-  
-    // 3. Open the print-template page with a clean URL
-    // We add /ai-resume-builder/ prefix for GitHub Pages compatibility
-    const printWindow = window.open(
-      '/ai-resume-builder/print-template',
-      '_blank'
+  // In src/pages/Resume.jsx
+// THIS IS THE CODE YOU ALREADY HAVE. IT IS CORRECT.
+
+const handleDownload = async () => {
+  try {
+    const res = await axios.post(
+      `${BASE_URL}/resume/download`,
+      { formData, template: selectedTemplate },
+      { responseType: "blob", headers: { Authorization: `Bearer ${token}` } }
     );
-    if (printWindow) {
-      printWindow.focus();
-    } else {
-      alert("Please allow popups to download your resume.");
+
+    // Check if the response is a blob, and not a JSON error
+    const contentType = res.headers['content-type'];
+    if (contentType && contentType.includes('application/json')) {
+      // ... your error handling ...
+      return; 
     }
-  };
+
+    // If it's a PDF, proceed to download
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "resume.pdf");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (err) {
+    console.error("Error downloading resume:", err.response?.data || err.message);
+    alert("Failed to download resume. Please try again.");
+  }
+};
   
   // === ^ END: MODIFIED DOWNLOAD HANDLER ^ ===
 
