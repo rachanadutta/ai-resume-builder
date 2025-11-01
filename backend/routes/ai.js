@@ -17,12 +17,27 @@ router.post("/suggest", async (req, res) => {
 
   switch (type) {
     case "skills":
-      prompt = `From this data (education, projects, experience), suggest 8–12 ATS-friendly technical skills, comma-separated, no soft skills.
+      prompt = `
+      You are an expert resume assistant. Based on the candidate’s background below, generate a structured JSON with categorized skills.
+      
+      Return only valid JSON in this format:
+      {
+        "webTechnologies": ["..."],
+        "databases": ["..."],
+        "tools": ["..."],
+        "soft": ["..."]
+      }
 
- Existing Skills: ${data.skills?.join(", ") || ""}
-Education: ${data.education || "N/A"}
-Projects: ${data.projects || "N/A"}
-Experience: ${data.experience || "N/A"}`;
+      - Include 8–12 total skills maximum.
+      - Keep all names capitalized properly.
+      - Do not include duplicates or explanations.
+      - No markdown, no extra text, no comments.
+
+      Existing Skills: ${JSON.stringify(data.skills || {})}
+      Education: ${JSON.stringify(data.education || "N/A")}
+      Projects: ${JSON.stringify(data.projects || "N/A")}
+      Experience: ${JSON.stringify(data.experience || "N/A")}
+      `;
       break;
 
     case "summary":

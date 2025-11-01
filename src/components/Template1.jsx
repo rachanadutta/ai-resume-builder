@@ -7,7 +7,7 @@ function Template1({ data }) {
   useEffect(() => {
     const adjustScale = () => {
       if (!containerRef.current) return;
-      const maxHeightPx = 1122; // approx 297mm
+      const maxHeightPx = 1122;
       const currentHeight = containerRef.current.scrollHeight;
       if (currentHeight > maxHeightPx) {
         const factor = Math.max(0.7, maxHeightPx / currentHeight);
@@ -24,106 +24,185 @@ function Template1({ data }) {
   const formatDate = (date) => {
     if (!date) return "";
     const d = new Date(date);
-    return isNaN(d) ? date : d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+    return isNaN(d)
+      ? date
+      : d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
   };
 
   return (
     <div
       ref={containerRef}
-      className="mx-auto bg-white shadow-md rounded-md"
+      className="p-16 mx-auto max-w-4xl bg-white shadow-md rounded-md"
       style={{
         width: "210mm",
         minHeight: "297mm",
-        padding: `${24 * scaleFactor}px`,
-        fontSize: `${1 * scaleFactor}rem`,
+        padding: `${16 * scaleFactor}px`,
+        fontSize: `${0.85 * scaleFactor}rem`,
         lineHeight: 1.4,
       }}
     >
       {/* Header */}
-      <div className="mb-4" style={{ marginBottom: `${16 * scaleFactor}px` }}>
-        <h1 className="font-bold" style={{ fontSize: `${2.25 * scaleFactor}rem` }}>
+      <div className="mb-4">
+        <h1
+          className="font-bold text-gray-900"
+          style={{ fontSize: `${1.4 * scaleFactor}rem` }}
+        >
           {data?.name || "Your Name"}
         </h1>
-        <h2 className="text-gray-800" style={{ fontSize: `${1.125 * scaleFactor}rem` }}>
+        <h2
+          className="text-gray-800"
+          style={{ fontSize: `${1 * scaleFactor}rem` }}
+        >
           {data?.title}
         </h2>
-        <section className="flex flex-wrap gap-15 text-sm text-gray-500" style={{ gap: `${15 * scaleFactor}px` }}>
-          {data?.email && <p className="hover:text-blue-500">{data.email}</p>}
-          {data?.phone && <p className="hover:text-blue-500">{data.phone}</p>}
-          {data?.linkedin && <a className="hover:text-blue-500" href={data.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>}
-          {data?.github && <a className="hover:text-blue-500" href={data.github} target="_blank" rel="noopener noreferrer">GitHub</a>}
-          {data?.portfolio && <a className="hover:text-blue-500" href={data.portfolio} target="_blank" rel="noopener noreferrer">Portfolio</a>}
+        <section
+          className="flex flex-wrap gap-3 text-gray-600 text-xs mt-1"
+          style={{ gap: `${10 * scaleFactor}px` }}
+        >
+          {data?.email && <p>{data.email}</p>}
+          {data?.phone && <p>{data.phone}</p>}
+          {data?.linkedin && (
+            <a href={data.linkedin} target="_blank" rel="noreferrer">
+              LinkedIn
+            </a>
+          )}
+          {data?.github && (
+            <a href={data.github} target="_blank" rel="noreferrer">
+              GitHub
+            </a>
+          )}
+          {data?.portfolio && (
+            <a href={data.portfolio} target="_blank" rel="noreferrer">
+              Portfolio
+            </a>
+          )}
         </section>
       </div>
 
       {/* Summary */}
       {data?.summary && (
-        <section className="mb-4" style={{ marginBottom: `${12 * scaleFactor}px` }}>
-          <h2 className="font-bold border-b pb-1">Summary</h2>
-          <p className="text-gray-700">{data.summary}</p>
+        <section className="mb-3">
+          <h2 className="font-bold border-b pb-1 text-sm">Summary</h2>
+          <ul className="list-disc list-inside text-gray-700 mt-1">
+            <li>{data.summary}</li>
+          </ul>
         </section>
       )}
 
       {/* Education */}
-      <section className="mb-4" style={{ marginBottom: `${12 * scaleFactor}px` }}>
-        <h2 className="font-bold border-b pb-1">Education</h2>
+      <section className="mb-3">
+        <h2 className="font-bold border-b pb-1 text-sm">Education</h2>
         {data?.education?.length > 0 ? (
           data.education.map((edu, i) => (
-            <div key={i} className="p-2 flex gap-15" style={{ padding: `${8 * scaleFactor}px 0` }}>
-              <p className="font-semibold">{edu.degree}</p>
-              <p className="text-gray-600">{edu.institution}</p>
-              <p className="text-gray-500 text-sm">{formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : "Present"}</p>
-            </div>
+            <ul key={i} className="list-disc list-inside mt-1">
+              <li className="font-semibold">
+                {edu.degree} - {edu.institution}
+              </li>
+              <li className="text-gray-500 text-xs">
+                {formatDate(edu.startDate)} -{" "}
+                {edu.endDate ? formatDate(edu.endDate) : "Present"}
+              </li>
+              {edu.description && (
+                <li className="text-gray-700 text-sm">{edu.description}</li>
+              )}
+            </ul>
           ))
         ) : (
           <p className="text-gray-400 italic">No education added yet</p>
         )}
       </section>
 
-      {/* Work Experience */}
+      {/* Experience */}
       {data?.experience?.length > 0 && (
-        <section className="mb-4">
-          <h2 className="font-bold border-b pb-1">Work Experience</h2>
-          <div className="grid grid-cols-2">
-            {data.experience.map((exp, i) => (
-              <div key={i} className="p-2">
-                <p className="font-semibold">{exp.title}</p>
-                <p className="text-gray-600">{exp.company}</p>
-                <p className="text-gray-500 text-sm">
-                  {formatDate(exp.start)} {exp.end ? ` - ${formatDate(exp.end)}` : "-Present"}
-                </p>
-                <p>{exp.description}</p>
-              </div>
-            ))}
-          </div>
+        <section className="mb-3">
+          <h2 className="font-bold border-b pb-1 text-sm">Experience</h2>
+          {data.experience.map((exp, i) => (
+            <div key={i} className="mt-1">
+              <p className="font-semibold">
+                {exp.title} - {exp.company}
+              </p>
+              <p className="text-gray-500 text-xs">
+                {formatDate(exp.start)}{" "}
+                {exp.end ? `- ${formatDate(exp.end)}` : "- Present"}
+              </p>
+              <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
+                {exp.description
+                  ?.split("\n")
+                  .map((point, idx) => (
+                    <li key={idx}>{point.trim()}</li>
+                  ))}
+              </ul>
+            </div>
+          ))}
         </section>
       )}
 
       {/* Skills */}
-      {data?.skills?.length > 0 && (
-        <section className="mb-4" style={{ marginBottom: `${12 * scaleFactor}px` }}>
-          <h2 className="font-bold border-b pb-1">Skills</h2>
-          <div className="grid grid-rows-2 gap-2 mt-2" style={{ gridAutoFlow: "column" }}>
-            {data.skills.map((skill, i) => (
-              <span key={i} style={{ padding: `${2 * scaleFactor}px ${4 * scaleFactor}px` }}>
-                {skill}
-              </span>
-            ))}
+      {data?.skills && (
+        <section className="mb-3">
+          <h2 className="font-bold border-b pb-1 text-sm">Skills</h2>
+
+          {/* Technical Skills */}
+          <div className="mt-1">
+            <p className="font-semibold text-sm">Technical Skills</p>
+            <ul className="list-disc list-inside text-sm text-gray-700">
+              <li>
+                <strong>Web Technologies:</strong>{" "}
+                {data.skills.webTechnologies?.join(", ") || "N/A"}
+              </li>
+              <li>
+                <strong>Databases:</strong>{" "}
+                {data.skills.databases?.join(", ") || "N/A"}
+              </li>
+              <li>
+                <strong>Tools & Frameworks:</strong>{" "}
+                {data.skills.tools?.join(", ") || "N/A"}
+              </li>
+            </ul>
           </div>
+
+          {/* Soft Skills */}
+          {data.skills.soft?.length > 0 && (
+            <div className="mt-2">
+              <p className="font-semibold text-sm">Soft Skills</p>
+              <ul className="list-disc list-inside text-sm text-gray-700">
+                {data.skills.soft.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </section>
       )}
 
       {/* Projects */}
       {data?.projects?.length > 0 && (
-        <section className="mb-4" style={{ marginBottom: `${12 * scaleFactor}px` }}>
-          <h2 className="font-bold border-b pb-1">Projects</h2>
+        <section className="mb-3">
+          <h2 className="font-bold border-b pb-1 text-sm">Projects</h2>
           {data.projects.map((proj, i) => (
-            <div key={i} className="p-2" style={{ padding: `${8 * scaleFactor}px 0` }}>
-              <div className="flex justify-between gap-4">
-                <p className="font-semibold">{proj.title}</p>
-                {proj?.link && <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline hover:underline-offset-2">Link</a>}
+            <div key={i} className="mt-1">
+              <div className="flex justify-between">
+                <p className="font-semibold">
+                  {proj.title} ({formatDate(proj.date)})
+                </p>
+                {proj?.link && (
+                  <a
+                    href={proj.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 text-xs hover:underline"
+                  >
+                    Link
+                  </a>
+                )}
               </div>
-              <p className="text-gray-600">{proj.description}</p>
+              <ul className="list-disc list-inside text-gray-700 text-sm mt-1">
+                {proj.description
+                  ?.split("\n")
+                  .map((line, idx) => (
+                    <li key={idx}>{line.trim()}</li>
+                  ))}
+              </ul>
             </div>
           ))}
         </section>
@@ -131,29 +210,58 @@ function Template1({ data }) {
 
       {/* Certificates */}
       {data?.certificates?.length > 0 && (
-        <section className="mb-4" style={{ marginBottom: `${12 * scaleFactor}px` }}>
-          <h2 className="font-bold border-b pb-1">Certificates</h2>
-          <div className="grid grid-cols-2">
+        <section className="mb-3">
+          <h2 className="font-bold border-b pb-1 text-sm">Certificates</h2>
+          <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
             {data.certificates.map((cert, i) => (
-              <div key={i} className="p-2" style={{ padding: `${8 * scaleFactor}px 0` }}>
-                <p className="font-semibold">{cert.title}</p>
-                <p className="text-gray-600">{cert.issuer}</p>
-                {cert?.link && <a href={cert.link} target="_blank" rel="noopener noreferrer">View Certificate</a>}
-              </div>
+              <li key={i}>
+                <span className="font-semibold">{cert.title}</span> —{" "}
+                {cert.issuer}
+                {cert.date && (
+                  <span className="text-gray-500 text-xs">
+                    {" "}
+                    ({formatDate(cert.date)})
+                  </span>
+                )}
+                {cert?.link && (
+                  <a
+                    href={cert.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 text-xs ml-1 hover:underline"
+                  >
+                    View
+                  </a>
+                )}
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       )}
-       {data?.others?.length > 0 && (
-          <section>
-            <h3 className="text-md font-bold border-b pb-1 mb-2">Others</h3>
-            <ul className="list-disc list-inside text-sm space-y-1">
-              {data.others.map((other, i) => (
-                <li key={i}>{other}</li>
-              ))}
-            </ul>
-          </section>
-        )}
+
+      {/* Other */}
+      {data?.other?.length > 0 && (
+        <section className="mb-3">
+          <h2 className="font-bold border-b pb-1 text-sm">Others</h2>
+          <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
+            {data.other.map((o, i) => (
+              <li key={i}>{o}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Languages */}
+      {data?.languages?.length > 0 && (
+        <section className="mb-3">
+          <h2 className="font-bold border-b pb-1 text-sm">Languages</h2>
+          <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
+            {data.languages.map((lang, i) => (
+              <li key={i}>{lang}</li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

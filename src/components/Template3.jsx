@@ -1,4 +1,4 @@
-import { h2 } from "motion/react-client";
+
 import { useEffect, useRef, useState } from "react";
 
 function Template3({ data }) {
@@ -103,6 +103,11 @@ function Template3({ data }) {
       <div key={i} className="mb-3">
         <p className="font-semibold">{cert.title}</p>
         <p className="text-gray-600">{cert.issuer}</p>
+        {cert.date && (
+          <p className="text-gray-500 text-sm">
+            {new Date(cert.date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+          </p>
+        )}
 
         {cert?.link && (
             <a href={cert.link} target="_blank" rel="noopener noreferrer">
@@ -154,15 +159,17 @@ function Template3({ data }) {
         {/* languages */}
         {data?.languages?.length > 0 && (
           <section>
-            <h3 className="text-md font-bold  pb-1 mb-2">Languages</h3>
+            <h3 className="text-md font-bold border-b pb-1 mb-2">Languages</h3>
             <ul className="list-disc list-inside text-sm space-y-1">
-              {data.languages.map((skill, i) => (
-                <li key={i}>{skill}</li>
+              {data.languages.map((lang, i) => (
+                <li key={i}>{lang}</li>
               ))}
             </ul>
           </section>
         )}
-         {data?.others?.length > 0 && (
+
+        {/* Others */}
+        {data?.others?.length > 0 && (
           <section>
             <h3 className="text-md font-bold border-b pb-1 mb-2">Others</h3>
             <ul className="list-disc list-inside text-sm space-y-1">

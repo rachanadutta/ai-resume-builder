@@ -33,7 +33,8 @@ function Resume() {
     skills: [],
     experience: [],
     education: [],
-    others: [],
+    other: [],
+    languages : [],
   });
 // const handleDownload = async () => {
 //   try {

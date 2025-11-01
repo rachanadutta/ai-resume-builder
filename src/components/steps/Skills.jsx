@@ -2,91 +2,139 @@ import React, { useState } from "react";
 import AIBox from "../AIBox";
 import axios from "axios";
 
-
 export default function Skills({ formData, setFormData, nextStep, prevStep }) {
   const BASE_URL = "https://ai-resume-backend-11s4.onrender.com";
-
-  const [skillInput, setSkillInput] = useState("");
-  const [showAI, setShowAI] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [input, setInput] = useState({ category: "webTechnologies", value: "" });
   const [aiText, setAiText] = useState("");
-  const handleAISuggest = async () => {
-   
-    setLoading(true);
-    // setShowAI(true);
-    setAiText("");
+  const [loading, setLoading] = useState(false);
 
-    try{
-      const res = await axios.post(`${BASE_URL}/api/ai/suggest`, {type:"skills", data: {skills: formData.skills},});
-      setAiText(res.data.aiText);
-      setShowAI(true);
-    }catch(err){
-      console.error(err.response?.data || err.message);
-    }finally{
-      setLoading(false);
-    }
-  };
-  const handleAccept = () => {
-    setFormData({
-      ...formData,
-      skills: aiText.split(",").map((s) => s.trim()),
-    });
-    setShowAI(false);
-    setLoading(false);
-    setAiText("");
+  const categories = {
+    webTechnologies: "Web Technologies",
+    databases: "Databases",
+    tools: "Tools & Frameworks",
+    soft: "Soft Skills",
   };
 
   const addSkill = () => {
-    if (skillInput.trim() !== "") {
-      setFormData({
-        ...formData,
-        skills: [...(formData.skills || []), skillInput.trim()]
+    if (!input.value.trim()) return;
+    const { category, value } = input;
+    setFormData({
+      ...formData,
+      skills: {
+        ...formData.skills,
+        [category]: [...(formData.skills?.[category] || []), value.trim()],
+      },
+    });
+    setInput({ ...input, value: "" });
+  };
+
+  const removeSkill = (cat, i) => {
+    const newList = formData.skills[cat].filter((_, idx) => idx !== i);
+    setFormData({
+      ...formData,
+      skills: { ...formData.skills, [cat]: newList },
+    });
+  };
+
+  const handleAISuggest = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.post(`${BASE_URL}/api/ai/suggest`, {
+        type: "skills",
+        data: { skills: formData.skills },
       });
-      setSkillInput("");
+      setAiText(res.data.aiText);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const removeSkill = (index) => {
-    const newSkills = formData.skills.filter((_, i) => i !== index);
-    setFormData({ ...formData, skills: newSkills });
+  const handleAccept = () => {
+    try {
+      // Expected AI response format (JSON)
+      const aiSkills = JSON.parse(aiText);
+
+      // Merge AI skills into existing ones
+      const merged = { ...formData.skills };
+      Object.keys(categories).forEach((cat) => {
+        merged[cat] = [
+          ...(merged[cat] || []),
+          ...(aiSkills[cat] || []),
+        ].filter((v, i, a) => a.indexOf(v) === i); // remove duplicates
+      });
+
+      setFormData({ ...formData, skills: merged });
+    } catch (e) {
+      console.error("AI response not in JSON format, using fallback");
+    }
+    setAiText("");
   };
 
   return (
     <div className="flex flex-col gap-4">
       <h2 className="font-bold text-2xl">Skills</h2>
 
-      <div>
+      <div className="flex gap-2">
+        <select
+          className="border p-2 rounded"
+          value={input.category}
+          onChange={(e) => setInput({ ...input, category: e.target.value })}
+        >
+          {Object.entries(categories).map(([k, v]) => (
+            <option key={k} value={k}>{v}</option>
+          ))}
+        </select>
         <input
-        className='border p-2 rounded '
-          type="text"
-          value={skillInput}
-          onChange={(e) => setSkillInput(e.target.value)}
-          placeholder="Add a skill"
+          className="border p-2 rounded flex-1"
+          placeholder={`Add a ${categories[input.category]} skill`}
+          value={input.value}
+          onChange={(e) => setInput({ ...input, value: e.target.value })}
         />
-        <button className="ml-4 border-2 px-2 py-1 rounded-lg hover:text-gray-600 cursor-pointer" type="button" onClick={addSkill}>Add</button>
+        <button onClick={addSkill} className="border px-3 py-1 rounded bg-blue-400 text-white">
+          Add
+        </button>
       </div>
 
-      <ul>
-        {formData.skills && formData.skills.map((skill, index) => (
-          <li className="text-lg ml-3 mt-3 " key={index}>
-            {skill} <button className="hover:text-red-600 text-lg cursor-pointer ml-6"  type="button" onClick={() => removeSkill(index)}>x</button>
-          </li>
-        ))}
-      </ul>
+      {Object.entries(categories).map(([key, label]) => (
+        <div key={key}>
+          <h3 className="font-semibold mt-3">{label}</h3>
+          <ul className="ml-4">
+            {(formData.skills?.[key] || []).map((s, i) => (
+              <li key={i} className="mt-1">
+                {s}{" "}
+                <button
+                  type="button"
+                  className="text-red-500 ml-2"
+                  onClick={() => removeSkill(key, i)}
+                >
+                  x
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
 
       <div className="flex justify-between mt-6">
-        <button className='border-2 px-3 py-2 rounded-lg bg-blue-400 text-white hover:bg-blue-700 cursor-pointer'  type="button" onClick={prevStep}>Back</button>
-         <button onClick={handleAISuggest} className="cursor-pointer mr-5 rounded-lg bg-fuchsia-400 px-3 py-2 text-white ">✨ AI Suggestions</button>
-        <button className='border-2 px-3 py-2 rounded-lg bg-blue-400 cursor-pointer text-white hover:bg-blue-700'  type="button" onClick={nextStep}>Next</button>
+        <button onClick={prevStep} className="border px-3 py-2 bg-blue-400 text-white rounded">
+          Back
+        </button>
+        <button onClick={handleAISuggest} className="bg-fuchsia-400 px-3 py-2 text-white rounded">
+          ✨ AI Suggest
+        </button>
+        <button onClick={nextStep} className="border px-3 py-2 bg-blue-400 text-white rounded">
+          Next
+        </button>
       </div>
+
       {(loading || aiText) && (
         <AIBox
           text={aiText}
           loading={loading}
           onAccept={handleAccept}
-          onDiscard={() => {setLoading(false); setAiText("");}
-          
-          }
+          onDiscard={() => setAiText("")}
         />
       )}
     </div>
