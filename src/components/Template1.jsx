@@ -220,10 +220,13 @@ function Template1({ data }) {
                 )}
               </div>
               {proj.description && (
-          <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
-            {proj.description.split("\n").map((point, idx) => (
-              <li key={idx}>{point.trim()}</li>
-            ))}
+          <ul className="list-disc list-inside text-sm text-gray-700 mt-1 ml-2">
+            {proj.description
+              .split(/\n+/) // splits only where you pressed Enter (paragraph break)
+              .filter((point) => point.trim() !== "") // ignores blank lines
+              .map((point, idx) => (
+                <li key={idx}>{point.trim()}</li>
+              ))}
           </ul>
         )}
             </div>
