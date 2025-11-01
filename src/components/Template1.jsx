@@ -83,7 +83,7 @@ function Template1({ data }) {
       {data?.summary && (
         <section className="mb-3">
           <h2 className="font-bold border-b pb-1 text-sm">Summary</h2>
-          <ul className="list-disc list-inside text-gray-700 mt-1">
+          <ul className=" text-gray-700 mt-1">
             <li>{data.summary}</li>
           </ul>
         </section>
@@ -170,16 +170,18 @@ function Template1({ data }) {
           </div>
 
           {/* Soft Skills */}
-          {data.skills.soft?.length > 0 && (
-            <div className="mt-2">
-              <p className="font-semibold text-sm">Soft Skills</p>
-              <ul className="list-disc list-inside text-sm text-gray-700">
-                {data.skills.soft.map((s, i) => (
-                  <li key={i}>{s}</li>
-                ))}
-              </ul>
-            </div>
-          )}
+          {/* Soft Skills */}
+{data.skills.soft?.length > 0 && (
+  <div className="mt-2">
+    <p className="font-semibold text-sm">
+      Soft Skills:{" "}
+      <span className="font-normal text-gray-700">
+        {data.skills.soft.join(", ")}
+      </span>
+    </p>
+  </div>
+)}
+
         </section>
       )}
 
@@ -227,7 +229,7 @@ function Template1({ data }) {
           <div>
             <span className="font-semibold">{cert.title}</span> — {cert.issuer}
           </div>
-          <div className="flex items-center gap-2 text-gray-500 text-xs">
+          <div className="flex items-center gap-4 text-gray-500 text-xs">
             {cert.date && <span>{formatDate(cert.date)}</span>}
             {cert?.link && (
               <a
@@ -250,7 +252,7 @@ function Template1({ data }) {
       {/* Other */}
       {data?.other?.length > 0 && (
         <section className="mb-3">
-          <h2 className="font-bold border-b pb-1 text-sm">Others</h2>
+          <h2 className="font-bold border-b pb-1 text-sm">Achievements</h2>
           <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
             {data.other.map((o, i) => (
               <li key={i}>{o}</li>
