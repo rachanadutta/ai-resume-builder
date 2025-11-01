@@ -36,7 +36,7 @@ function Template1({ data }) {
       style={{
         width: "210mm",
         minHeight: "297mm",
-        padding: `${16 * scaleFactor}px`,
+        padding: "20mm",
         fontSize: `${0.85 * scaleFactor}rem`,
         lineHeight: 1.4,
       }}
@@ -94,7 +94,7 @@ function Template1({ data }) {
         <h2 className="font-bold border-b pb-1 text-sm">Education</h2>
         {data?.education?.length > 0 ? (
           data.education.map((edu, i) => (
-            <ul key={i} className="list-disc list-inside mt-1">
+            <ul key={i} className=" mt-1">
               <li className="font-semibold">
                 {edu.degree} - {edu.institution}
               </li>
@@ -113,29 +113,36 @@ function Template1({ data }) {
       </section>
 
       {/* Experience */}
-      {data?.experience?.length > 0 && (
-        <section className="mb-3">
-          <h2 className="font-bold border-b pb-1 text-sm">Experience</h2>
-          {data.experience.map((exp, i) => (
-            <div key={i} className="mt-1">
-              <p className="font-semibold">
-                {exp.title} - {exp.company}
-              </p>
-              <p className="text-gray-500 text-xs">
-                {formatDate(exp.start)}{" "}
-                {exp.end ? `- ${formatDate(exp.end)}` : "- Present"}
-              </p>
-              <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
-                {exp.description
-                  ?.split("\n")
-                  .map((point, idx) => (
-                    <li key={idx}>{point.trim()}</li>
-                  ))}
-              </ul>
-            </div>
-          ))}
-        </section>
-      )}
+      {/* Experience */}
+{data?.experience?.length > 0 && (
+  <section className="mb-3">
+    <h2 className="font-bold border-b pb-1 text-sm">Experience</h2>
+    {data.experience.map((exp, i) => (
+      <div key={i} className="mt-2">
+        {/* Title + Company + Date in same line */}
+        <div className="flex justify-between items-center">
+          <p className="font-semibold">
+            {exp.title} - {exp.company}
+          </p>
+          <p className="text-gray-500 text-xs">
+            {formatDate(exp.start)}{" "}
+            {exp.end ? `- ${formatDate(exp.end)}` : "- Present"}
+          </p>
+        </div>
+
+        {/* Description as bullet points */}
+        {exp.description && (
+          <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
+            {exp.description.split("\n").map((point, idx) => (
+              <li key={idx}>{point.trim()}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    ))}
+  </section>
+)}
+
 
       {/* Skills */}
       {data?.skills && (
@@ -209,35 +216,35 @@ function Template1({ data }) {
       )}
 
       {/* Certificates */}
-      {data?.certificates?.length > 0 && (
-        <section className="mb-3">
-          <h2 className="font-bold border-b pb-1 text-sm">Certificates</h2>
-          <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
-            {data.certificates.map((cert, i) => (
-              <li key={i}>
-                <span className="font-semibold">{cert.title}</span> —{" "}
-                {cert.issuer}
-                {cert.date && (
-                  <span className="text-gray-500 text-xs">
-                    {" "}
-                    ({formatDate(cert.date)})
-                  </span>
-                )}
-                {cert?.link && (
-                  <a
-                    href={cert.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-blue-600 text-xs ml-1 hover:underline"
-                  >
-                    View
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      {/* Certificates */}
+{data?.certificates?.length > 0 && (
+  <section className="mb-3">
+    <h2 className="font-bold border-b pb-1 text-sm">Certificates</h2>
+    <ul className="text-sm text-gray-700 mt-2 space-y-1">
+      {data.certificates.map((cert, i) => (
+        <li key={i} className="flex justify-between items-center">
+          <div>
+            <span className="font-semibold">{cert.title}</span> — {cert.issuer}
+          </div>
+          <div className="flex items-center gap-2 text-gray-500 text-xs">
+            {cert.date && <span>{formatDate(cert.date)}</span>}
+            {cert?.link && (
+              <a
+                href={cert.link}
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                View
+              </a>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
 
       {/* Other */}
       {data?.other?.length > 0 && (
