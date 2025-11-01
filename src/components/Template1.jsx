@@ -155,6 +155,10 @@ function Template1({ data }) {
             <p className="font-semibold text-sm">Technical Skills</p>
             <ul className="list-disc list-inside text-sm text-gray-700">
               <li>
+                <strong>Programming Languages:</strong>{" "}
+                {data.skills.languages?.join(", ") || "N/A"}
+              </li>
+              <li>
                 <strong>Web Technologies:</strong>{" "}
                 {data.skills.webTechnologies?.join(", ") || "N/A"}
               </li>

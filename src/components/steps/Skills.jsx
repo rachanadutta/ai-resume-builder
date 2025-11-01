@@ -10,6 +10,7 @@ export default function Skills({ formData, setFormData, nextStep, prevStep }) {
 
   const categories = {
     webTechnologies: "Web Technologies",
+    languages: "Programming Languages",
     databases: "Databases",
     tools: "Tools & Frameworks",
     soft: "Soft Skills",
