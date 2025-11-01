@@ -11,21 +11,12 @@ const app = express();
 // middleware to parse JSON
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: [
-      "https://rachanadutta.github.io",
-      "http://localhost:5173", // for local dev
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
-
-// Handle preflight manually (some servers need this)
-app.options("*", cors());
-
+app.use(cors(
+    {
+        origin: "https://rachanadutta.github.io",
+        credentials: true,
+    }
+));
 
 // connect to MongoDB
 connectDB();
