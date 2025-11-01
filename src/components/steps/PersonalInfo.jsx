@@ -52,6 +52,15 @@ export default function PersonalInfo({formData,setFormData, nextStep}){
         value={formData.linkedin}
         onChange={(e)=> setFormData({...formData,linkedin:e.target.value})}
         placeholder='Enter your LinkedIn Link' />
+        <label className='text-lg font-semibold' htmlFor="leetcode">LeetCode</label>
+        <input className='border p-2 caret-black rounded '
+        type="url"
+        id='leetcode'
+        name='leetcode'
+        value={formData.leetcode}
+        onChange={(e)=> setFormData({...formData,leetcode:e.target.value})}
+        placeholder='Enter your LeetCode Account Link' />
+<div className='flex justify-end mt-6'></div>
 
         <label className='text-lg font-semibold' htmlFor="portfolio">Portfolio</label>
         <input className='border p-2 caret-black rounded '

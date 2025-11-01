@@ -71,6 +71,11 @@ function Template1({ data }) {
               GitHub
             </a>
           )}
+          {data?.leetcode && (
+            <a href={data.leetcode} target="_blank" rel="noreferrer">
+              LeetCode
+            </a>
+          )}
           {data?.portfolio && (
             <a href={data.portfolio} target="_blank" rel="noreferrer">
               Portfolio
@@ -97,7 +102,8 @@ function Template1({ data }) {
             <ul key={i} className=" mt-1">
               <li className="font-semibold">
                 {edu.degree}
-                {edu.institution}
+                <br />
+  <span className="text-gray-700 font-normal">{edu.institution}</span>
               </li>
               <li className="text-gray-500 text-xs">
                 {formatDate(edu.startDate)} -{" "}
@@ -210,13 +216,9 @@ function Template1({ data }) {
                   </a>
                 )}
               </div>
-              <ul className="list-disc list-inside text-gray-700 text-sm mt-1">
-                {proj.description
-                  ?.split("\n")
-                  .map((line, idx) => (
-                    <li key={idx}>{line.trim()}</li>
-                  ))}
-              </ul>
+              <p className="text-gray-700 text-sm mt-1 pl-3">
+  • {proj.description}
+</p>
             </div>
           ))}
         </section>

@@ -28,6 +28,7 @@ function Resume() {
     github: "",
     linkedin: "",
     portfolio: "",
+    leetcode: "",
     summary: "",
 
     skills: [],
