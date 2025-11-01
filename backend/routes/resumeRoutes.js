@@ -108,9 +108,16 @@ router.post("/download", authMiddleware, async (req, res) => {
     console.log("Downloading PDF...");
     page.on("console", (msg) => console.log("PAGE LOG:", msg.text()));
     page.on("pageerror", (err) => console.log("PAGE ERROR:", err.message));
-    const cleanedData = JSON.stringify(formData).replace(/\n/g, "\\n");
+    let cleanedData = JSON.stringify(formData)
+  .replace(/\n/g, "\\n")   // prevent URI malformed
+  .replace(/#/g, "%23")    // escape hash
+  .replace(/&/g, "%26")    // escape ampersand
+  .replace(/\?/g, "%3F");  // escape question marks
 
-    const pageUrl = `https://rachanadutta.github.io/ai-resume-builder/print-template?template=${template}&data=${encodeURIComponent(cleanedData)}`;
+const encodedData = encodeURIComponent(cleanedData);
+
+
+    const pageUrl = `https://rachanadutta.github.io/ai-resume-builder/print-template?template=${template}&data=${encodedData}`;
     console.log(`Navigating to URL: ${pageUrl}`);
 
     await page.goto(pageUrl, {
